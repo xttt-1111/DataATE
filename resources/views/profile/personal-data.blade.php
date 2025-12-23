@@ -421,7 +421,6 @@
                     @error('license_expiry')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
-                </div>
 
                 <!-- Student/Staff card -->
                     <div class="field-card">
