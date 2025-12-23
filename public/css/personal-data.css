@@ -20,7 +20,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -173,7 +174,8 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    overflow: hidden;
+    overflow: visible;
+    /* Explicitly visible */
     box-shadow: var(--shadow);
     position: relative;
 }
@@ -182,20 +184,24 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
+    /* Added to keep image circular */
 }
 
 .avatar-edit {
     position: absolute;
     bottom: -2px;
     right: -2px;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    /* Slightly larger for better visibility */
+    height: 20px;
     background: var(--white);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: var(--shadow);
+    z-index: 100;
 }
 
 .avatar-edit svg {
@@ -316,8 +322,15 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Error Message */
@@ -357,97 +370,97 @@ body {
     body {
         background: linear-gradient(135deg, #D3DCE3 0%, #C5CED6 100%);
     }
-    
+
     .personal-nav {
         padding: 25px 80px;
     }
-    
+
     .personal-nav .logo img {
         height: 35px;
     }
-    
+
     .personal-nav .nav-links {
         gap: 50px;
     }
-    
+
     .personal-nav .nav-links a {
         font-size: 15px;
     }
-    
+
     .personal-container {
         max-width: 800px;
         padding: 30px 60px 80px;
     }
-    
+
     .page-title {
         font-size: 32px;
         margin-bottom: 40px;
     }
-    
+
     .back-button {
         font-size: 15px;
         margin-bottom: 30px;
     }
-    
+
     .back-button svg {
         width: 24px;
         height: 24px;
     }
-    
+
     .tabs-container {
         margin-bottom: 40px;
     }
-    
+
     .tab-item {
         padding: 18px 24px;
         font-size: 16px;
     }
-    
+
     .form-fields {
         gap: 16px;
     }
-    
+
     .field-card {
         padding: 22px 28px;
         border-radius: 24px;
     }
-    
+
     .field-avatar {
         width: 60px;
         height: 60px;
     }
-    
+
     .avatar-edit {
         width: 20px;
         height: 20px;
     }
-    
+
     .avatar-edit svg {
         width: 12px;
         height: 12px;
     }
-    
+
     .field-label {
         font-size: 15px;
     }
-    
+
     .field-value,
     .field-input {
         font-size: 20px;
     }
-    
+
     .field-edit svg {
         width: 24px;
         height: 24px;
     }
-    
+
     .submit-section {
         position: relative;
         background: transparent;
         box-shadow: none;
         padding: 40px 0 20px;
     }
-    
+
     .submit-btn {
         max-width: 300px;
         padding: 20px 50px;
@@ -460,21 +473,21 @@ body {
     .personal-nav {
         padding: 30px 100px;
     }
-    
+
     .personal-container {
         max-width: 900px;
         padding: 40px 80px 100px;
     }
-    
+
     .page-title {
         font-size: 36px;
     }
-    
+
     .tab-item {
         padding: 20px 28px;
         font-size: 17px;
     }
-    
+
     .field-card {
         padding: 26px 32px;
     }
@@ -487,20 +500,20 @@ body {
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .personal-nav .nav-links {
         gap: 20px;
     }
-    
+
     .personal-container {
         padding: 20px;
         padding-bottom: 120px;
     }
-    
+
     .page-title {
         font-size: 24px;
     }
-    
+
     .tab-item {
         font-size: 12px;
         padding: 12px 10px;
@@ -514,24 +527,23 @@ body {
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     .personal-nav .nav-links a {
         font-size: 12px;
     }
-    
+
     .field-value,
     .field-input {
         font-size: 16px;
     }
-    
+
     .tab-item {
         font-size: 10px;
         padding: 10px 8px;
     }
-    
+
     .submit-btn {
         font-size: 18px;
         padding: 16px 30px;
     }
 }
-

@@ -48,8 +48,12 @@
         @endphp
 
         @if ($errors->any())
-            <div class="error-message" style="margin-bottom: 16px;">
-                Please fix the highlighted fields.
+            <div class="error-message" style="margin-bottom: 16px; text-align: left;">
+                <ul style="margin-left: 20px; list-style-type: disc;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
         @endif
 
@@ -80,8 +84,8 @@
                     <!-- Username with Avatar -->
                     <div class="field-card with-avatar">
                         <div class="field-left">
-                            <div class="field-avatar">
-                                <img src="{{ Auth::user()->avatar ?? asset('image/default-avatar.svg') }}" alt="Profile" id="avatarPreview">
+                            <div class="field-avatar" style="overflow: visible !important;">
+                                <img src="{{ Auth::user()->avatar ? asset(Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($customer->username ?? $user->name) . '&background=3E5789&color=fff' }}" alt="Profile" id="avatarPreview" style="border-radius: 50%;">
                                 <div class="avatar-edit" onclick="document.getElementById('avatarInput').click()">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>

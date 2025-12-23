@@ -8,17 +8,22 @@
         <!-- Profile Header -->
         <div class="profile-header">
             <!-- Avatar Section -->
+            <!-- Avatar Section -->
             <div class="avatar-section">
-                <div class="avatar-wrapper">
-                    <img src="{{ Auth::user()->avatar ?? asset('image/default-avatar.svg') }}" alt="Profile Picture" id="avatarImage">
-                </div>
-                <button class="avatar-edit-btn" onclick="document.getElementById('avatarInput').click()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                        <circle cx="12" cy="13" r="4"></circle>
-                    </svg>
-                </button>
-                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                <form id="avatar-upload-form" action="{{ route('profile.personal-data.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('patch')
+                    <div class="avatar-wrapper">
+                        <img src="{{ Auth::user()->avatar ? asset(Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->customer->username ?? Auth::user()->name) . '&background=3E5789&color=fff' }}" alt="Profile Picture" id="avatarImage" style="border-radius: 50%;">
+                    </div>
+                    <button type="button" class="avatar-edit-btn" onclick="document.getElementById('avatarInput').click()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                    </button>
+                    <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display: none;" onchange="document.getElementById('avatar-upload-form').submit()">
+                </form>
             </div>
 
             <!-- User Info -->
