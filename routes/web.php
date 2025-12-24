@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Auth\CustomerController;
@@ -7,10 +8,7 @@ use App\Http\Controllers\LoyaltyController;
 use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('mainpage');
-})->name('mainpage');
-
+Route::get('/', [HomeController::class, 'index'])->name('mainpage');
 
 Route::middleware('auth')->group(function (){
     Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
