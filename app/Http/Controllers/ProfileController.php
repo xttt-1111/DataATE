@@ -110,6 +110,7 @@ class ProfileController extends Controller
             'license_image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,pdf', 'max:5120'],
             'identity_card_image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,pdf', 'max:5120'],
             'matric_staff_image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,pdf', 'max:5120'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:10240'],
         ];
 
         $validated = $request->validate($rules);
@@ -120,10 +121,40 @@ class ProfileController extends Controller
         if (isset($validated['name'])) {
             $user->name = $validated['name'];
         }
+
+        // Handle Avatar Upload
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($user->avatar && file_exists(public_path($user->avatar))) {
+                try {
+                    unlink(public_path($user->avatar));
+                } catch (\Exception $e) {
+                    // Log error but continue with upload
+                    \Illuminate\Support\Facades\Log::error('Failed to delete old avatar: ' . $e->getMessage());
+                }
+            }
+
+            $file = $request->file('avatar');
+            $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            
+            // Create directory if it doesn't exist
+            $directory = public_path('images/avatars');
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+            
+            // Move file to public/images/avatars
+            $file->move($directory, $filename);
+            
+            // Store relative path in database
+            $user->avatar = 'images/avatars/' . $filename;
+        }
+
         $user->save();
 
         // Remove attributes that belong to the user model only
         unset($validated['name']);
+        unset($validated['avatar']);
 
         // Create or update customer profile
         $customer = $user->customer ?: new Customer([
@@ -203,7 +234,7 @@ class ProfileController extends Controller
         $customer->fill($validated);
         $customer->save();
 
-        return Redirect::route('profile.personal-data')->with('status', 'personal-data-updated');
+        return back()->with('status', 'personal-data-updated');
     }
 
     /**

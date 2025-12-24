@@ -1,4 +1,4 @@
-/* Personal Data Page CSS - Based on Figma Design */
+/* Personal Data Page CSS - Sidebar Layout */
 
 /* CSS Variables */
 :root {
@@ -20,7 +20,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -69,7 +70,7 @@ body {
 
 /* Main Container */
 .personal-container {
-    max-width: 600px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px 40px 100px;
 }
@@ -83,47 +84,51 @@ body {
     color: var(--text-primary);
 }
 
-/* Tabs Navigation */
-.tabs-container {
-    display: flex;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 30px;
+/* ===== LEFT SIDEBAR LAYOUT ===== */
+.personal-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 28px;
+    align-items: start;
 }
 
-.tab-item {
-    flex: 1;
-    padding: 14px 16px;
-    text-align: center;
+/* Left Sidebar */
+.sidebar-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: 20px;
+}
+
+/* Sidebar Tab Button */
+.side-tab {
+    width: 100%;
+    text-align: left;
+    border: none;
+    cursor: pointer;
+    padding: 16px 18px;
+    border-radius: 18px;
     font-family: 'Inter', sans-serif;
     font-weight: 800;
-    font-size: 14px;
+    font-size: 16px;
+    background: #C5D3E0;
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.25s ease;
+}
+
+.side-tab:hover:not(.active) {
+    background: #B0C2D4;
+}
+
+.side-tab.active {
+    background: #3E5789;
     color: var(--white);
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
-    background: var(--tab-inactive);
 }
 
-.tab-item:first-child {
-    border-radius: 20px 0 0 20px;
-}
-
-.tab-item:last-child {
-    border-radius: 0 20px 20px 0;
-}
-
-.tab-item.active {
-    background: var(--tab-active);
-}
-
-.tab-item.semi-active {
-    background: var(--tab-semi);
-}
-
-.tab-item:hover:not(.active) {
-    background: var(--tab-semi);
+/* Right Content Area */
+.content-area {
+    min-width: 0;
 }
 
 /* Tab Content */
@@ -173,7 +178,7 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: var(--shadow);
     position: relative;
 }
@@ -182,20 +187,28 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
 }
 
 .avatar-edit {
     position: absolute;
     bottom: -2px;
     right: -2px;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     background: var(--white);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: var(--shadow);
+    z-index: 100;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.avatar-edit:hover {
+    transform: scale(1.1);
 }
 
 .avatar-edit svg {
@@ -240,7 +253,7 @@ body {
     stroke: var(--text-primary);
 }
 
-/* Editable Input */
+/* Editable Input & Select */
 .field-input {
     font-size: 20px;
     font-weight: 600;
@@ -261,17 +274,15 @@ body {
     color: var(--text-secondary);
 }
 
+.field-select {
+    cursor: pointer;
+}
+
 /* Submit Section */
 .submit-section {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    padding: 20px 40px;
+    margin-top: 30px;
     display: flex;
     justify-content: center;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .submit-btn {
@@ -316,8 +327,14 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Error Message */
@@ -352,158 +369,50 @@ body {
     height: 20px;
 }
 
-/* Responsive - Laptop */
-@media (min-width: 1024px) {
-    body {
-        background: linear-gradient(135deg, #D3DCE3 0%, #C5CED6 100%);
+/* Responsive - Tablet & Below */
+@media (max-width: 900px) {
+    .personal-layout {
+        grid-template-columns: 1fr;
     }
-    
-    .personal-nav {
-        padding: 25px 80px;
+
+    .sidebar-tabs {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+        position: static;
     }
-    
-    .personal-nav .logo img {
-        height: 35px;
-    }
-    
-    .personal-nav .nav-links {
-        gap: 50px;
-    }
-    
-    .personal-nav .nav-links a {
-        font-size: 15px;
-    }
-    
-    .personal-container {
-        max-width: 800px;
-        padding: 30px 60px 80px;
-    }
-    
-    .page-title {
-        font-size: 32px;
-        margin-bottom: 40px;
-    }
-    
-    .back-button {
-        font-size: 15px;
-        margin-bottom: 30px;
-    }
-    
-    .back-button svg {
-        width: 24px;
-        height: 24px;
-    }
-    
-    .tabs-container {
-        margin-bottom: 40px;
-    }
-    
-    .tab-item {
-        padding: 18px 24px;
-        font-size: 16px;
-    }
-    
-    .form-fields {
-        gap: 16px;
-    }
-    
-    .field-card {
-        padding: 22px 28px;
-        border-radius: 24px;
-    }
-    
-    .field-avatar {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .avatar-edit {
-        width: 20px;
-        height: 20px;
-    }
-    
-    .avatar-edit svg {
-        width: 12px;
-        height: 12px;
-    }
-    
-    .field-label {
-        font-size: 15px;
-    }
-    
-    .field-value,
-    .field-input {
-        font-size: 20px;
-    }
-    
-    .field-edit svg {
-        width: 24px;
-        height: 24px;
-    }
-    
-    .submit-section {
-        position: relative;
-        background: transparent;
-        box-shadow: none;
-        padding: 40px 0 20px;
-    }
-    
-    .submit-btn {
-        max-width: 300px;
-        padding: 20px 50px;
-        font-size: 20px;
+
+    .side-tab {
+        flex: 1;
+        min-width: 180px;
+        text-align: center;
+        font-size: 14px;
+        padding: 14px 16px;
     }
 }
 
-/* Large Laptop / Desktop */
-@media (min-width: 1440px) {
-    .personal-nav {
-        padding: 30px 100px;
-    }
-    
-    .personal-container {
-        max-width: 900px;
-        padding: 40px 80px 100px;
-    }
-    
-    .page-title {
-        font-size: 36px;
-    }
-    
-    .tab-item {
-        padding: 20px 28px;
-        font-size: 17px;
-    }
-    
-    .field-card {
-        padding: 26px 32px;
-    }
-}
-
-/* Responsive - Tablet */
 @media (max-width: 768px) {
     .personal-nav {
         padding: 15px 20px;
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .personal-nav .nav-links {
         gap: 20px;
     }
-    
+
     .personal-container {
         padding: 20px;
         padding-bottom: 120px;
     }
-    
+
     .page-title {
         font-size: 24px;
     }
-    
-    .tab-item {
-        font-size: 12px;
-        padding: 12px 10px;
+
+    .personal-layout {
+        gap: 20px;
     }
 }
 
@@ -514,24 +423,155 @@ body {
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     .personal-nav .nav-links a {
         font-size: 12px;
     }
-    
+
     .field-value,
     .field-input {
         font-size: 16px;
     }
-    
-    .tab-item {
-        font-size: 10px;
-        padding: 10px 8px;
+
+    .side-tab {
+        font-size: 12px;
+        padding: 12px 10px;
+        min-width: 140px;
     }
-    
+
     .submit-btn {
         font-size: 18px;
         padding: 16px 30px;
     }
 }
 
+/* Responsive - Laptop */
+@media (min-width: 1024px) {
+    body {
+        background: linear-gradient(135deg, #D3DCE3 0%, #C5CED6 100%);
+    }
+
+    .personal-nav {
+        padding: 25px 80px;
+    }
+
+    .personal-nav .logo img {
+        height: 35px;
+    }
+
+    .personal-nav .nav-links {
+        gap: 50px;
+    }
+
+    .personal-nav .nav-links a {
+        font-size: 15px;
+    }
+
+    .personal-container {
+        max-width: 1400px;
+        padding: 30px 60px 80px;
+    }
+
+    .page-title {
+        font-size: 32px;
+        margin-bottom: 40px;
+    }
+
+    .back-button {
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+    .back-button svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .personal-layout {
+        grid-template-columns: 320px 1fr;
+        gap: 40px;
+    }
+
+    .sidebar-tabs {
+        gap: 16px;
+    }
+
+    .side-tab {
+        padding: 18px 22px;
+        font-size: 17px;
+        border-radius: 20px;
+    }
+
+    .form-fields {
+        gap: 16px;
+    }
+
+    .field-card {
+        padding: 22px 28px;
+        border-radius: 24px;
+    }
+
+    .field-avatar {
+        width: 60px;
+        height: 60px;
+    }
+
+    .avatar-edit {
+        width: 22px;
+        height: 22px;
+    }
+
+    .avatar-edit svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .field-label {
+        font-size: 15px;
+    }
+
+    .field-value,
+    .field-input {
+        font-size: 20px;
+    }
+
+    .field-edit svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .submit-section {
+        margin-top: 40px;
+    }
+
+    .submit-btn {
+        max-width: 300px;
+        padding: 20px 50px;
+        font-size: 20px;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+    .personal-nav {
+        padding: 30px 100px;
+    }
+
+    .personal-container {
+        max-width: 1600px;
+        padding: 40px 80px 100px;
+    }
+
+    .page-title {
+        font-size: 36px;
+    }
+
+    .side-tab {
+        padding: 20px 24px;
+        font-size: 18px;
+    }
+
+    .field-card {
+        padding: 26px 32px;
+    }
+}

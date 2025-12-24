@@ -48,8 +48,12 @@
         @endphp
 
         @if ($errors->any())
-            <div class="error-message" style="margin-bottom: 16px;">
-                Please fix the highlighted fields.
+            <div class="error-message" style="margin-bottom: 16px; text-align: left;">
+                <ul style="margin-left: 20px; list-style-type: disc;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
         @endif
 
@@ -65,12 +69,22 @@
             @csrf
             @method('patch')
             
-            <!-- Tabs Navigation -->
-            <div class="tabs-container">
-            <button type="button" class="tab-item {{ $activeTab === 'personal' ? 'active' : '' }}" onclick="showTab('personal')">Personal Information</button>
-            <button type="button" class="tab-item {{ $activeTab === 'emergency' ? 'active' : '' }}" onclick="showTab('emergency')">Emergency Contact</button>
-            <button type="button" class="tab-item {{ $activeTab === 'documents' ? 'active' : '' }}" onclick="showTab('documents')">Documents</button>
-        </div>
+            <div class="personal-layout">
+                <!-- Left Sidebar Tabs -->
+                <div class="sidebar-tabs">
+                    <button type="button" class="side-tab {{ $activeTab === 'personal' ? 'active' : '' }}" onclick="showTab('personal')">
+                        Personal Information
+                    </button>
+                    <button type="button" class="side-tab {{ $activeTab === 'emergency' ? 'active' : '' }}" onclick="showTab('emergency')">
+                        Emergency Contact
+                    </button>
+                    <button type="button" class="side-tab {{ $activeTab === 'documents' ? 'active' : '' }}" onclick="showTab('documents')">
+                        Documents
+                    </button>
+                </div>
+
+                <!-- Right Content Area -->
+                <div class="content-area">
 
         <!-- Personal Information Tab -->
         <div id="personal-tab" class="tab-content {{ $activeTab === 'personal' ? 'active' : '' }}">
@@ -80,8 +94,8 @@
                     <!-- Username with Avatar -->
                     <div class="field-card with-avatar">
                         <div class="field-left">
-                            <div class="field-avatar">
-                                <img src="{{ Auth::user()->avatar ?? asset('image/default-avatar.svg') }}" alt="Profile" id="avatarPreview">
+                            <div class="field-avatar" style="overflow: visible !important;">
+                                <img src="{{ Auth::user()->avatar ? asset(Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($customer->username ?? $user->name) . '&background=3E5789&color=fff' }}" alt="Profile" id="avatarPreview" style="border-radius: 50%;">
                                 <div class="avatar-edit" onclick="document.getElementById('avatarInput').click()">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
@@ -127,8 +141,17 @@
                     <div class="field-card">
                         <div class="field-info">
                             <span class="field-label">Gender</span>
-                            <input type="text" name="gender" class="field-input" value="{{ old('gender', $customer->gender ?? '') }}" placeholder="e.g. Male">
+                            <select name="gender" class="field-input field-select">
+                            <option value="" disabled {{ empty($gender) ? 'selected' : '' }}>
+                                Select Gender
+                            </option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+
                         </div>
+
                         <div class="field-edit">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -136,6 +159,7 @@
                             </svg>
                         </div>
                     </div>
+
                     @error('gender')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
@@ -177,8 +201,78 @@
                     <div class="field-card">
                         <div class="field-info">
                             <span class="field-label">Faculty</span>
-                            <input type="text" name="faculty" class="field-input" value="{{ old('faculty', $customer->faculty ?? '') }}" placeholder="e.g. Faculty of Computing (FC)">
+
+                            @php
+                                $faculty = old('faculty', $customer->faculty ?? '');
+                            @endphp
+
+                            <select name="faculty" class="field-input field-select">
+                                <option value="" disabled {{ empty($faculty) ? 'selected' : '' }}>
+                                    Select Faculty
+                                </option>
+
+                                <option value="Azman Hashim International Business School (AHIBS)"
+                                    {{ $faculty === 'Azman Hashim International Business School (AHIBS)' ? 'selected' : '' }}>
+                                    Azman Hashim International Business School (AHIBS)
+                                </option>
+
+                                <option value="Faculty of Artificial Intelligence (FAI)"
+                                    {{ $faculty === 'Faculty of Artificial Intelligence (FAI)' ? 'selected' : '' }}>
+                                    Faculty of Artificial Intelligence (FAI)
+                                </option>
+
+                                <option value="Faculty of Built Environment and Surveying"
+                                    {{ $faculty === 'Faculty of Built Environment and Surveying' ? 'selected' : '' }}>
+                                    Faculty of Built Environment and Surveying
+                                </option>
+
+                                <option value="Faculty of Chemical & Energy Engineering"
+                                    {{ $faculty === 'Faculty of Chemical & Energy Engineering' ? 'selected' : '' }}>
+                                    Faculty of Chemical &amp; Energy Engineering
+                                </option>
+
+                                <option value="Faculty of Computing"
+                                    {{ $faculty === 'Faculty of Computing' ? 'selected' : '' }}>
+                                    Faculty of Computing
+                                </option>
+
+                                <option value="Faculty of Educational Sciences and Technology (FEST)"
+                                    {{ $faculty === 'Faculty of Educational Sciences and Technology (FEST)' ? 'selected' : '' }}>
+                                    Faculty of Educational Sciences and Technology (FEST)
+                                </option>
+
+                                <option value="Faculty of Electrical Engineering"
+                                    {{ $faculty === 'Faculty of Electrical Engineering' ? 'selected' : '' }}>
+                                    Faculty of Electrical Engineering
+                                </option>
+
+                                <option value="Faculty of Management"
+                                    {{ $faculty === 'Faculty of Management' ? 'selected' : '' }}>
+                                    Faculty of Management
+                                </option>
+
+                                <option value="Faculty of Mechanical Engineering"
+                                    {{ $faculty === 'Faculty of Mechanical Engineering' ? 'selected' : '' }}>
+                                    Faculty of Mechanical Engineering
+                                </option>
+
+                                <option value="Faculty of Science"
+                                    {{ $faculty === 'Faculty of Science' ? 'selected' : '' }}>
+                                    Faculty of Science
+                                </option>
+
+                                <option value="Faculty of Social Sciences and Humanities"
+                                    {{ $faculty === 'Faculty of Social Sciences and Humanities' ? 'selected' : '' }}>
+                                    Faculty of Social Sciences and Humanities
+                                </option>
+
+                                <option value="Malaysia-Japan International Institute of Technology (MJIIT)"
+                                    {{ $faculty === 'Malaysia-Japan International Institute of Technology (MJIIT)' ? 'selected' : '' }}>
+                                    Malaysia-Japan International Institute of Technology (MJIIT)
+                                </option>
+                            </select>
                         </div>
+
                         <div class="field-edit">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -186,6 +280,7 @@
                             </svg>
                         </div>
                     </div>
+
                     @error('faculty')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
@@ -194,8 +289,49 @@
                     <div class="field-card">
                         <div class="field-info">
                             <span class="field-label">Kolej</span>
-                            <input type="text" name="residential_college" class="field-input" value="{{ old('residential_college', $customer->residential_college ?? '') }}" placeholder="e.g. Kolej Tun Dr Ismail (KTDI)">
+
+                            @php
+                                $kolej = old('residential_college', $customer->residential_college ?? '');
+                            @endphp
+
+                            <select name="residential_college" class="field-input field-select">
+                                <option value="" disabled {{ empty($kolej) ? 'selected' : '' }}>
+                                    Select Kolej
+                                </option>
+
+                                <option value="Kolej Tun Dr Ismail" {{ $kolej === 'Kolej Tun Dr Ismail' ? 'selected' : '' }}>
+                                    Kolej Tun Dr Ismail
+                                </option>
+                                <option value="Kolej Rahman Putra" {{ $kolej === 'Kolej Rahman Putra' ? 'selected' : '' }}>
+                                    Kolej Rahman Putra
+                                </option>
+                                <option value="Kolej Tun Fatimah" {{ $kolej === 'Kolej Tun Fatimah' ? 'selected' : '' }}>
+                                    Kolej Tun Fatimah
+                                </option>
+                                <option value="Kolej Tun Razak" {{ $kolej === 'Kolej Tun Razak' ? 'selected' : '' }}>
+                                    Kolej Tun Razak
+                                </option>
+                                <option value="Kolej Tun Hussein Onn" {{ $kolej === 'Kolej Tun Hussein Onn' ? 'selected' : '' }}>
+                                    Kolej Tun Hussein Onn
+                                </option>
+                                <option value="Kolej Tuanku Canselor" {{ $kolej === 'Kolej Tuanku Canselor' ? 'selected' : '' }}>
+                                    Kolej Tuanku Canselor
+                                </option>
+                                <option value="Kolej Perdana" {{ $kolej === 'Kolej Perdana' ? 'selected' : '' }}>
+                                    Kolej Perdana
+                                </option>
+                                <option value="Kolej 9 & 10" {{ $kolej === 'Kolej 9 & 10' ? 'selected' : '' }}>
+                                    Kolej 9 &amp; 10
+                                </option>
+                                <option value="Kolej Datin Seri Endon" {{ $kolej === 'Kolej Datin Seri Endon' ? 'selected' : '' }}>
+                                    Kolej Datin Seri Endon
+                                </option>
+                                <option value="Kolej Dato Onn Jaafar" {{ $kolej === 'Kolej Dato Onn Jaafar' ? 'selected' : '' }}>
+                                    Kolej Dato Onn Jaafar
+                                </option>
+                            </select>
                         </div>
+
                         <div class="field-edit">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -203,6 +339,7 @@
                             </svg>
                         </div>
                     </div>
+
                     @error('residential_college')
                         <div class="error-message">{{ $message }}</div>
                     @enderror
@@ -450,7 +587,7 @@
             });
             
             // Remove active class from all tab buttons
-            document.querySelectorAll('.tab-item').forEach(btn => {
+            document.querySelectorAll('.side-tab').forEach(btn => {
                 btn.classList.remove('active');
                 btn.classList.remove('semi-active');
             });

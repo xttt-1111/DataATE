@@ -4,6 +4,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Auth\CustomerController;
+use App\Http\Controllers\LoyaltyController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('mainpage');
@@ -23,6 +25,15 @@ Route::middleware('auth')->group(function (){
     Route::get('/profile/order-history', [BookingController::class, 'orderHistory'])->name('profile.order-history');
     Route::get('/booking/{id}/cancel', [BookingController::class, 'showCancelForm'])->name('booking.cancel.form');
     Route::post('/booking/{id}/cancel', [BookingController::class, 'cancelBooking'])->name('booking.cancel');
+    
+    // Loyalty Routes
+    Route::get('/loyalty', [LoyaltyController::class, 'index'])->name('loyalty.index');
+    
+    // Voucher Routes
+    Route::get('/loyalty/redeem', [VoucherController::class, 'redeemPage'])->name('loyalty.redeem'); // Selection Page
+    Route::post('/loyalty/redeem', [VoucherController::class, 'store'])->name('voucher.store'); // Process Redemption
+    
+    Route::get('/profile/vouchers', [VoucherController::class, 'index'])->name('profile.vouchers');
 
    
     Route::get('/booking/calendar', [BookingController::class, 'calendar'])->name('booking.calendar');
