@@ -5,11 +5,19 @@ body {
     min-height: 100vh;
 }
 
+/* Specific Container Override for Loyalty Page */
+.loyalty-page-container {
+    max-width: 500px !important;
+    /* Smaller container as requested */
+    margin: 0 auto;
+}
+
 .loyalty-card {
     background-color: #374e7a;
     border-radius: 12px;
     padding: 24px;
-    margin-bottom: 24px;
+    margin: 0 auto 24px auto;
+    max-width: 500px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     color: white;
     text-align: center;
@@ -51,11 +59,15 @@ body {
 
 .history-card {
     background-color: #aeb7c8;
+    /* Updated to match voucher theme or preference */
     border-radius: 12px;
     padding: 24px;
-    margin-bottom: 80px;
+    margin: 0 auto 80px auto;
+    max-width: 500px;
+    /* Space for fixed bottom buttons */
     min-height: 300px;
     color: #1f2937;
+    /* Gray-800 */
 }
 
 .history-title {
@@ -100,6 +112,10 @@ body {
 .bottom-buttons {
     position: fixed;
     bottom: 30px;
+    /* Center fixed buttons relative to the viewport, but constrained max-width might be needed if user wants it inside container. 
+       However, fixed position refers to viewport. Let's keep it but maybe limit width if needed.
+       For now, centered is fine.
+    */
     left: 0;
     right: 0;
     display: flex;
