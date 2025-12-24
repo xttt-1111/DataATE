@@ -35,11 +35,46 @@
 
             <!-- Car Selection -->
             <div class="form-group">
-                <label>Car</label>
-                <div class="input-field">
-                    <span class="field-value" id="selectedCar">Perodua Bezza 2023</span>
-                </div>
+                <label for="carSelect">Car</label>
+                <select name="car" id="carSelect" class="custom-select">
+                    <option value="">-- Select a Car --</option>
+                    @foreach($cars as $car)
+                        <option value="{{ $car->plate_no }}">{{ $car->model }} ({{ $car->plate_no }})</option>
+                    @endforeach
+                </select>
             </div>
+
+            <style>
+                .custom-select {
+                    width: 750px;
+                    /* change box width */
+                    padding: 12px 40px 12px 12px;
+                    /* top/bottom = height, right = arrow space */
+                    border: 1px solid #ccc;
+                    /* box border */
+                    border-radius: 12px;
+                    /* rounded corners */
+                    appearance: none;
+                    /* remove default arrow */
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    background: #f9f9f9 url('data:image/svg+xml;utf8,<svg fill="%23999" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 12px center;
+                    background-size: 16px;
+                    font-family: 'Arial', sans-serif;
+                    /* change font */
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+
+                /* Optional: nicer focus effect */
+                .custom-select:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 2px rgba(20, 122, 255, 0.3);
+                }
+            </style>
+
+
+
 
             <!-- Calendar Section -->
             <div class="form-group">
@@ -132,6 +167,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Rental Duration -->
             <div class="form-group">
                 <label>Rental duration</label>
@@ -141,6 +177,7 @@
                 <div class="duration-hours" id="durationHours"></div>
             </div>
 
+            
             <!-- Pick Up Location -->
             <div class="form-group">
                 <label>Pick Up Location</label>
@@ -161,59 +198,62 @@
                 <span class="field-note">A minimum charge of RM10 for location besides Student Mall</span>
             </div>
 
-            <!-- Destination -->
             <div class="form-group">
                 <label>Destination</label>
                 <div class="input-field map-group">
-                    <input type="text" id="destination"  placeholder="Enter destination">
+                    <input type="text" id="destination" name="destination" value="{{ $destination ?? '' }}"
+                        placeholder="Enter destination">
                     <button type="button" class="map-icon-btn" onclick="openMapPicker('destination')">📍</button>
                 </div>
             </div>
 
-            <!-- Confirm Button -->
-            <button class="confirm-btn" onclick="confirmBooking()">Confirm</button>
         </div>
 
-        <!-- Time Picker Modal -->
-        <div class="time-picker-modal" id="timePickerModal">
-            <div class="time-picker-overlay" onclick="closeTimePicker()"></div>
-            <div class="time-picker-container">
-                <div class="time-picker-header">
-                    <span class="time-picker-title" id="timePickerTitle">Select time</span>
-                </div>
+        <!-- Confirm Button -->
+<button type="button" class="confirm-btn" onclick="confirmBooking()">
+    Confirm
+</button>
 
-                <div class="time-picker-content">
-                    <!-- Time Input Display -->
-                    <div class="time-input-display">
-                        <div class="time-input-group">
-                            <div class="time-input-box active" id="hourInput" onclick="setTimeMode('hour')">
-                                <span id="selectedHour">07</span>
-                            </div>
-                            <span class="time-separator">:</span>
-                            <div class="time-input-box" id="minuteInput" onclick="setTimeMode('minute')">
-                                <span id="selectedMinute">00</span>
-                            </div>
+    <!-- Time Picker Modal -->
+    <div class="time-picker-modal" id="timePickerModal">
+        <div class="time-picker-overlay" onclick="closeTimePicker()"></div>
+        <div class="time-picker-container">
+            <div class="time-picker-header">
+                <span class="time-picker-title" id="timePickerTitle">Select time</span>
+            </div>
+
+            <div class="time-picker-content">
+                <!-- Time Input Display -->
+                <div class="time-input-display">
+                    <div class="time-input-group">
+                        <div class="time-input-box active" id="hourInput" onclick="setTimeMode('hour')">
+                            <span id="selectedHour">07</span>
                         </div>
-                        <div class="period-selector">
-                            <button class="period-btn active" id="amBtn" onclick="setPeriod('AM')">AM</button>
-                            <button class="period-btn" id="pmBtn" onclick="setPeriod('PM')">PM</button>
+                        <span class="time-separator">:</span>
+                        <div class="time-input-box" id="minuteInput" onclick="setTimeMode('minute')">
+                            <span id="selectedMinute">00</span>
                         </div>
                     </div>
-
-                    <!-- Clock Face -->
-                    <div class="clock-face" id="clockFace">
-                        <div class="clock-center"></div>
-                        <div class="clock-hand" id="clockHand"></div>
-                        <!-- Hour numbers will be generated by JS -->
+                    <div class="period-selector">
+                        <button class="period-btn active" id="amBtn" onclick="setPeriod('AM')">AM</button>
+                        <button class="period-btn" id="pmBtn" onclick="setPeriod('PM')">PM</button>
                     </div>
                 </div>
 
-                <div class="time-picker-actions">
-                    <button class="time-picker-btn cancel" onclick="closeTimePicker()">Cancel</button>
-                    <button class="time-picker-btn ok" onclick="confirmTime()">OK</button>
+                <!-- Clock Face -->
+                <div class="clock-face" id="clockFace">
+                    <div class="clock-center"></div>
+                    <div class="clock-hand" id="clockHand"></div>
+                    <!-- Hour numbers will be generated by JS -->
                 </div>
             </div>
+
+            <div class="time-picker-actions">
+                <button class="time-picker-btn cancel" onclick="closeTimePicker()">Cancel</button>
+                <button class="time-picker-btn ok" onclick="confirmTime()">OK</button>
+            </div>
         </div>
+    </div>
     </div>
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6G0oqiCvdkEPLPmtqJcTHjxsZCPF8aOM&libraries=places"></script>

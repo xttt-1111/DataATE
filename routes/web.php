@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\CustomerController;
 use App\Http\Controllers\LoyaltyController;
 use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RentalController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('mainpage');
 
@@ -35,23 +37,23 @@ Route::middleware('auth')->group(function (){
     
     Route::get('/profile/vouchers', [VoucherController::class, 'index'])->name('profile.vouchers');
 
-   
-    Route::get('/booking/calendar', [BookingController::class, 'calendar'])->name('booking.calendar');
-    Route::get('/booking/confirm', [BookingController::class, 'confirm'])->name('booking.confirm');
-    Route::get('/booking/voucher', [BookingController::class, 'voucher'])->name('booking.voucher');
-    Route::get('/booking/pickup', [BookingController::class, 'pickup'])->name('booking.pickup');
-    Route::post('/booking/pickup', [BookingController::class, 'storePickup'])->name('booking.pickup.store');
-    Route::get('/booking/return', [BookingController::class, 'returnCar'])->name('booking.return');
-    Route::post('/booking/return', [BookingController::class, 'storeReturn'])->name('booking.return.store');
-    Route::get('/booking/complete', [BookingController::class, 'complete'])->name('booking.complete');
-    Route::get('/booking/reminder', [BookingController::class, 'reminder'])->name('booking.reminder');
-    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+    Route::get('/test-rental', [RentalController::class, 'store']);
+    Route::get('/booking/calendar', [RentalController::class, 'calendar'])->name('booking.calendar');
+    Route::get('/booking/confirm', [RentalController::class, 'confirm'])->name('booking.confirm');
+    Route::get('/booking/voucher', [RentalController::class, 'voucher'])->name('booking.voucher');
+    Route::get('/booking/pickup', [RentalController::class, 'pickup'])->name('booking.pickup');
+    Route::post('/booking/pickup', [RentalController::class, 'storePickup'])->name('booking.pickup.store');
+    Route::get('/booking/return', [RentalController::class, 'returnCar'])->name('booking.return');
+    Route::post('/booking/return', [RentalController::class, 'storeReturn'])->name('booking.return.store');
+    Route::get('/booking/complete', [RentalController::class, 'complete'])->name('booking.complete');
+    Route::get('/booking/reminder', [RentalController::class, 'reminder'])->name('booking.reminder');
+    Route::post('/booking', [RentalController::class, 'store'])->name('booking.store');
     Route::get('/booking/pickup_form', function () {
     return view('booking.pickup_form');
     })->name('booking.pickup');
 
     Route::middleware('checkAdmin')->group(function () {
-        Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+        Route::get('/booking', [RentalController::class, 'index'])->name('booking.index');
     });
 
 });

@@ -411,29 +411,33 @@ body {
 /* Confirm Button */
 .confirm-btn {
     display: block;
-    width: 152px;
-    height: 39px;
-    margin: 24px auto 0;
-    background: var(--confirm-btn-bg);
+    width: 100%;
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 16px 32px;
+    background: #14213D;
+    color: white;
     border: none;
-    border-radius: 15px;
+    border-radius: 12px;
     font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 1.5;
-    color: var(--form-bg);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.1s ease;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .confirm-btn:hover {
-    background: #1a2a4f;
-    transform: translateY(-1px);
+    background: #1a2d54;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(20, 33, 61, 0.3);
 }
 
 .confirm-btn:active {
     transform: translateY(0);
 }
+
 
 /* Responsive Adjustments */
 @media (max-width: 480px) {

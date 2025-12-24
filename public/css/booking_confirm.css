@@ -133,8 +133,8 @@ body {
 /* Booking Details */
 .detail-row {
     display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    justify-content: space-between; /* This pushes label left and value right */
+    align-items: center; 
     margin-bottom: 12px;
 }
 
@@ -147,16 +147,18 @@ body {
 
 .detail-content {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    justify-content: space-between; /* Ensures space between child elements */
+    width: 100%; /* Spans the full width of the card */
+    align-items: center;
 }
 
 .detail-label {
-    font-family: 'Sen', sans-serif;
+    font-family: 'Shippori Antique', serif;
     font-weight: 400;
-    font-size: 10px;
-    line-height: 2.2;
-    color: var(--text-header);
+    font-size: 13px;
+    line-height: 1.69;
+    color: var(--text-primary);
+    flex: 1;
 }
 
 .detail-value {
@@ -165,22 +167,22 @@ body {
     font-size: 13px;
     line-height: 1.69;
     color: var(--text-primary);
+    flex: 1;
 }
 
 /* Price Details */
 .price-row {
     display: flex;
+    justify-content: space-between; /* label left, amount right */
     align-items: center;
     margin-bottom: 8px;
+    font-family: 'Shippori Antique', serif; /* same font */
 }
-
 .price-label {
-    font-family: 'Sen', sans-serif;
+    font-family: 'Shippori Antique', serif; /* match value */
     font-weight: 400;
-    font-size: 10px;
-    line-height: 2.2;
-    color: var(--text-header);
-    min-width: 80px;
+    font-size: 13px;
+    color: var(--text-primary);
 }
 
 .price-value {
@@ -198,8 +200,7 @@ body {
     font-size: 13px;
     line-height: 1.69;
     color: var(--text-primary);
-    text-align: right;
-    min-width: 80px;
+    flex: 1;
 }
 
 .addons-row {
@@ -219,9 +220,17 @@ body {
     margin: 12px 0;
 }
 
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
 .total-row .price-label,
 .total-row .price-amount {
-    font-weight: 600;
+    font-family: 'Shippori Antique', serif;
+    font-size: 14px;
+    text-align: right;
 }
 
 .price-amount.total {

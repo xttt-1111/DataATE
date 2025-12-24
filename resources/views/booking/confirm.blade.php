@@ -33,63 +33,70 @@
         <section class="details-card booking-details">
             <h3 class="card-title">Booking Details</h3>
             
-            <div class="detail-row">
-                <div class="detail-icon">
-                    <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8.5 1L11.5 7L17 8L13 12L14 17L8.5 14.5L3 17L4 12L0 8L5.5 7L8.5 1Z" fill="#000"/>
-                    </svg>
-                </div>
-                <div class="detail-content">
-                    <span class="detail-label">Destination</span>
-                    <span class="detail-value" id="destination">Melaka</span>
-                </div>
-            </div>
+           <!-- Pick Up Location Display -->
+<div class="detail-row">
+    <span class="price-value">Pick Up Location:</span>
+    <span class="price-amount">{{ $bookingDetails['pickup_location'] }}</span>
+</div>
 
-            <div class="detail-row">
-                <div class="detail-icon">
-                    <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="1" y="3" width="15" height="13" rx="2" stroke="#000" stroke-width="1.5"/>
-                        <path d="M1 7H16" stroke="#000" stroke-width="1.5"/>
-                        <path d="M5 1V4" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="M12 1V4" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="detail-content">
-                    <span class="detail-label">Time</span>
-                    <span class="detail-value" id="bookingTime">7:00am (16.12.2025) - 7:00am (19.12.2025)</span>
-                </div>
-            </div>
+<!-- Return Location Display -->
+<div class="detail-row">
+    <span class="price-value">Return Location:</span>
+    <span class="price-amount">{{ $bookingDetails['return_location'] }}</span>
+</div>
+
+<!-- Destination Display -->
+<div class="detail-row">
+    <span class="price-value">Destination:</span>
+    <span class="price-amount">{{ $bookingDetails['destination'] }}</span>
+</div>
+
+<!-- Start Time Display -->
+<div class="detail-row">
+    <span class="price-value">Start Time:</span>
+    <span class="price-amount">{{ \Carbon\Carbon::parse($bookingDetails['start_time'])->format('d/m/Y h:i A') }}</span>
+</div>
+
+<!-- End Time Display -->
+<div class="detail-row">
+    <span class="price-value">End Time:</span>
+    <span class="price-amount">{{ \Carbon\Carbon::parse($bookingDetails['end_time'])->format('d/m/Y h:i A') }}</span>
+</div>
+<!-- Booking Hours Display -->
+<div class="detail-row">
+    <span class="price-value">Booking Hours:</span>
+    <span class="price-amount" id="bookingHours">{{ $bookingDetails['booking_hours'] }} hour(s)</span>
+</div>
         </section>
+
+
 
         <!-- Price Details Card -->
         <section class="details-card price-details">
             <h3 class="card-title">Price Details</h3>
-            
-            <div class="price-row">
-                <span class="price-label">Booking Time</span>
-                <span class="price-value" id="bookingHours">72 hour(s)</span>
-                <span class="price-amount" id="bookingPrice">RM450.00</span>
-            </div>
+       <div class="detail-row">
+    <span class="price-value">Booking Price:</span>
+    <span class="price-amount" id="bookingPrice">RM{{ number_format($bookingDetails['price'], 2) }}</span>
+</div>
 
-            <div class="price-row">
-                <span class="price-label">Deposit</span>
-                <span class="price-value"></span>
-                <span class="price-amount" id="depositAmount">RM   50.00</span>
-            </div>
+<div class="detail-row">
+    <span class="price-value">Deposit:</span>
+    <span class="price-amount" id="depositAmount">RM{{ number_format($bookingDetails['deposit'], 2) }}</span>
+</div>
 
-<div class="price-row addons-row">
-    <span class="price-label">Add-Ons</span>
-    <span class="price-amount" id="addonsAmount" style="margin-left:auto;">RM 0.00</span>
+<div class="detail-row">
+    <span class="price-value">Add-ons:</span>
+    <span class="price-amount" id="addonsAmount">RM{{ number_format($bookingDetails['addons'], 2) }}</span>
 </div>
 
 
             <div class="price-divider"></div>
 
-            <div class="price-row total-row">
-                <span class="price-label">Total Price</span>
-                <span class="price-value"></span>
-                <span class="price-amount total" id="totalPrice">RM500.00</span>
-            </div>
+            
+<div class="detail-row total-row">
+    <span class="price-value">Total:</span>
+    <span class="price-amount" id="totalPrice">RM{{ number_format($bookingDetails['total'], 2) }}</span>
+</div>
 
             <button class="edit-btn" onclick="editBooking()">Edit</button>
         </section>

@@ -8,18 +8,17 @@ let selectedEndDate = null;
 let map;
 let geocoder;
 let activeMapInputId = null;
-let currentMarker = null; // To track the selected point
-const studentMallJB = { lat: 1.558557, lng: 103.636647 }; // Student Mall UTM JB
+let currentMarker = null;
+const studentMallJB = { lat: 1.558557, lng: 103.636647 };
 
 // Time state
 let startTime = { hour: 7, minute: 0, period: 'AM' };
 let endTime = { hour: 7, minute: 0, period: 'PM' };
-let currentTimeSelection = 'start'; // 'start' or 'end'
-let timeMode = 'hour'; // 'hour' or 'minute'
+let currentTimeSelection = 'start';
+let timeMode = 'hour';
 let tempTime = { hour: 7, minute: 0, period: 'AM' };
 
-// Sample booking data - this would come from the backend
-// Status: 'whole-day', 'half-day', 'few-hours', 'unavailable'
+// Sample booking data
 const bookingData = {
     '2025-12-9': 'whole-day',
     '2025-12-10': 'whole-day',
@@ -41,10 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize calendar
 function initializeCalendar() {
-    // Set current month/year in selects
     document.getElementById('monthSelect').value = currentMonth;
     document.getElementById('yearSelect').value = currentYear;
-    
     renderCalendar();
 }
 
@@ -61,7 +58,6 @@ function renderCalendar() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    // Add empty cells for days before the first day of the month
     for (let i = 0; i < startingDay; i++) {
         const emptyDay = document.createElement('button');
         emptyDay.className = 'calendar-day hidden';
@@ -69,7 +65,6 @@ function renderCalendar() {
         calendarDays.appendChild(emptyDay);
     }
     
-    // Add days of the month
     for (let day = 1; day <= totalDays; day++) {
         const dayButton = document.createElement('button');
         dayButton.className = 'calendar-day';
@@ -78,12 +73,10 @@ function renderCalendar() {
         const dateObj = new Date(currentYear, currentMonth, day);
         const dateKey = `${currentYear}-${currentMonth + 1}-${day}`;
         
-        // Check if date is in the past
         if (dateObj < today) {
             dayButton.classList.add('disabled');
             dayButton.disabled = true;
         } else {
-            // Check booking status
             const status = bookingData[dateKey];
             if (status) {
                 switch (status) {
@@ -108,12 +101,10 @@ function renderCalendar() {
                 }
             }
             
-            // Check if today
             if (dateObj.getTime() === today.getTime()) {
                 dayButton.classList.add('today');
             }
             
-            // Check if selected
             if (selectedStartDate && dateObj.getTime() === selectedStartDate.getTime()) {
                 dayButton.classList.add('selected-start');
             }
@@ -125,7 +116,6 @@ function renderCalendar() {
                 dayButton.classList.add('selected-range');
             }
             
-            // Add click handler
             if (!dayButton.disabled) {
                 dayButton.addEventListener('click', () => selectDate(dateObj, day));
             }
@@ -134,7 +124,6 @@ function renderCalendar() {
         calendarDays.appendChild(dayButton);
     }
     
-    // Add empty cells to complete the last row
     const remainingCells = 7 - ((startingDay + totalDays) % 7);
     if (remainingCells < 7) {
         for (let i = 0; i < remainingCells; i++) {
@@ -145,22 +134,6 @@ function renderCalendar() {
             calendarDays.appendChild(emptyDay);
         }
     }
-}
-
-function initMap() {
-    const defaultLocation = { lat: 1.5607, lng: 103.6370 }; // UTM JB
-
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: defaultLocation,
-        zoom: 14,
-    });
-
-    geocoder = new google.maps.Geocoder();
-
-    map.addListener("click", function (event) {
-        placeMarker(event.latLng);
-        getAddress(event.latLng);
-    });
 }
 
 function getAddress(latLng) {
@@ -176,7 +149,6 @@ function getAddress(latLng) {
         }
     });
 }
-
 
 function placeMarker(location) {
     if (currentMarker) {
@@ -202,7 +174,6 @@ function openMapPicker(inputId) {
 
         geocoder = new google.maps.Geocoder();
 
-        // Place default marker
         currentMarker = new google.maps.Marker({
             position: studentMallJB,
             map: map,
@@ -229,7 +200,6 @@ function closeMapPicker() {
     document.getElementById('mapModal').classList.remove('active');
 }
 
-// Confirm map selection
 function confirmMapSelection() {
     if (!currentMarker) {
         alert("Please click on the map to select a location.");
@@ -240,27 +210,19 @@ function confirmMapSelection() {
     closeMapPicker();
 }
 
-function closeMap() {
-    document.getElementById('mapModal').style.display = 'none';
-}
-
-// Select date - now triggers time picker
 function selectDate(date, day) {
     if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
-        // Start new selection - show time picker for start time
         selectedStartDate = date;
         selectedEndDate = null;
         currentTimeSelection = 'start';
         tempTime = { ...startTime };
         showTimePicker('Select start time');
     } else if (date >= selectedStartDate) {
-        // Set end date - show time picker for end time
         selectedEndDate = date;
         currentTimeSelection = 'end';
         tempTime = { ...endTime };
         showTimePicker('Select end time');
     } else {
-        // Reset and start new selection
         selectedStartDate = date;
         selectedEndDate = null;
         currentTimeSelection = 'start';
@@ -273,11 +235,10 @@ function selectDate(date, day) {
 
 function initializeClockFace() {
     const clockFace = document.getElementById('clockFace');
-    const radius = 85; // Matches the height of the clock hand
+    const radius = 85;
     const centerX = 128;
     const centerY = 128;
     
-    // Clear existing to avoid duplicates
     clockFace.querySelectorAll('.clock-number').forEach(n => n.remove());
     
     for (let i = 1; i <= 12; i++) {
@@ -290,26 +251,21 @@ function initializeClockFace() {
         numberEl.dataset.value = i;
         numberEl.style.left = `${x}px`;
         numberEl.style.top = `${y}px`;
-        // Centering trick for perfect alignment
-        numberEl.style.transform = 'translate(-50%, -50%)'; 
+        numberEl.style.transform = 'translate(-50%, -50%)';
         
         numberEl.onclick = () => selectClockNumber(i);
         clockFace.appendChild(numberEl);
     }
 }
 
-// Replace the existing selectClockNumber function
 function selectClockNumber(value) {
     if (timeMode === 'hour') {
-        tempTime.hour = value; // 1-12
+        tempTime.hour = value;
         updateClockSelection();
-        
-        // Auto-switch to minute mode after a short delay
         setTimeout(() => {
             setTimeMode('minute');
         }, 300);
     } else {
-        // In minute mode, value 12 represents 0 minutes
         let mins = value * 5;
         tempTime.minute = mins === 60 ? 0 : mins;
         updateClockSelection();
@@ -317,7 +273,6 @@ function selectClockNumber(value) {
 }
 
 function updateClockSelection() {
-    // Update digital display
     document.getElementById('selectedHour').textContent = 
         tempTime.hour.toString().padStart(2, '0');
     document.getElementById('selectedMinute').textContent = 
@@ -341,7 +296,6 @@ function updateClockSelection() {
             if (isSelected) handAngle = val * 30;
         }
         
-        // This class now triggers the white text color in CSS
         el.classList.toggle('selected', isSelected);
     });
     
@@ -352,7 +306,6 @@ function updateClockSelection() {
     document.getElementById('pmBtn').classList.toggle('active', tempTime.period === 'PM');
 }
 
-// Set time mode (hour or minute)
 function setTimeMode(mode) {
     timeMode = mode;
     document.getElementById('hourInput').classList.toggle('active', mode === 'hour');
@@ -360,13 +313,11 @@ function setTimeMode(mode) {
     updateClockSelection();
 }
 
-// Set period (AM/PM)
 function setPeriod(period) {
     tempTime.period = period;
     updateClockSelection();
 }
 
-// Show time picker modal
 function showTimePicker(title) {
     const modal = document.getElementById('timePickerModal');
     document.getElementById('timePickerTitle').textContent = title;
@@ -379,35 +330,25 @@ function showTimePicker(title) {
     modal.classList.add('active');
 }
 
-// Close time picker
 function closeTimePicker() {
     const modal = document.getElementById('timePickerModal');
     modal.classList.remove('active');
 }
 
-// Confirm time selection
 function confirmTime() {
     if (currentTimeSelection === 'start') {
         startTime = { ...tempTime };
         closeTimePicker();
-        
-        // If we have an end date, show end time picker
         if (selectedEndDate) {
-            setTimeout(() => {
-                currentTimeSelection = 'end';
-                tempTime = { ...endTime };
-                showTimePicker('Select end time');
-            }, 300);
+            updateDurationField();
         }
     } else {
         endTime = { ...tempTime };
         closeTimePicker();
+        updateDurationField();
     }
-    
-    updateDurationField();
 }
 
-// Update duration field with time and calculate hours
 function updateDurationField() {
     const durationInput = document.getElementById('rentalDuration');
     const durationHours = document.getElementById('durationHours');
@@ -417,12 +358,15 @@ function updateDurationField() {
         const endStr = formatDateTime(selectedEndDate, endTime);
         durationInput.value = `${startStr} - ${endStr}`;
         
-        // Calculate total hours
         const totalHours = calculateHours();
-        durationHours.textContent = `Total: ${totalHours} hour${totalHours !== 1 ? 's' : ''}`;
+        if (totalHours > 0) {
+            durationHours.textContent = `Total: ${totalHours} hour${totalHours !== 1 ? 's' : ''}`;
+        } else {
+            durationHours.textContent = 'End time must be after start time';
+        }
     } else if (selectedStartDate) {
         const startStr = formatDateTime(selectedStartDate, startTime);
-        durationInput.value = `${startStr} - Select end date`;
+        durationInput.value = `${startStr} - Select end date/time`;
         durationHours.textContent = '';
     } else {
         durationInput.value = '';
@@ -430,11 +374,9 @@ function updateDurationField() {
     }
 }
 
-// Calculate total hours between start and end
 function calculateHours() {
     if (!selectedStartDate || !selectedEndDate) return 0;
     
-    // Convert to 24-hour format
     let startHour24 = startTime.hour;
     if (startTime.period === 'PM' && startTime.hour !== 12) startHour24 += 12;
     if (startTime.period === 'AM' && startTime.hour === 12) startHour24 = 0;
@@ -443,21 +385,18 @@ function calculateHours() {
     if (endTime.period === 'PM' && endTime.hour !== 12) endHour24 += 12;
     if (endTime.period === 'AM' && endTime.hour === 12) endHour24 = 0;
     
-    // Create full date-time objects
     const startDateTime = new Date(selectedStartDate);
     startDateTime.setHours(startHour24, startTime.minute, 0, 0);
     
     const endDateTime = new Date(selectedEndDate);
     endDateTime.setHours(endHour24, endTime.minute, 0, 0);
     
-    // Calculate difference in hours
     const diffMs = endDateTime - startDateTime;
-    const diffHours = Math.round(diffMs / (1000 * 60 * 60) * 10) / 10; // Round to 1 decimal
+    const diffHours = Math.round(diffMs / (1000 * 60 * 60) * 10) / 10;
     
     return Math.max(0, diffHours);
 }
 
-// Format date with time for display
 function formatDateTime(date, time) {
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -467,7 +406,6 @@ function formatDateTime(date, time) {
     return `${day}/${month}/${year} ${hour}:${minute} ${time.period}`;
 }
 
-// Format date for display (without time)
 function formatDate(date) {
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -475,7 +413,20 @@ function formatDate(date) {
     return `${day}/${month}/${year}`;
 }
 
-// Change month
+function formatDateTimeForLaravel(date, time) {
+    let hour24 = time.hour;
+    if (time.period === 'PM' && time.hour !== 12) hour24 += 12;
+    if (time.period === 'AM' && time.hour === 12) hour24 = 0;
+    
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(hour24).padStart(2, '0');
+    const minutes = String(time.minute).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:00`;
+}
+
 function changeMonth(delta) {
     currentMonth += delta;
     
@@ -493,14 +444,12 @@ function changeMonth(delta) {
     renderCalendar();
 }
 
-// Update calendar from selects
 function updateCalendar() {
     currentMonth = parseInt(document.getElementById('monthSelect').value);
     currentYear = parseInt(document.getElementById('yearSelect').value);
     renderCalendar();
 }
 
-// Go back to previous page
 function goBack() {
     if (window.history.length > 1) {
         window.history.back();
@@ -509,58 +458,93 @@ function goBack() {
     }
 }
 
-// Confirm booking
 function confirmBooking() {
+    console.log('=== CONFIRM BOOKING CLICKED ===');
+    
+    // Validate dates
     if (!selectedStartDate || !selectedEndDate) {
+        console.log('ERROR: Missing dates');
         showNotification('Please select both start and end dates with times', 'error');
         return;
     }
     
     const totalHours = calculateHours();
+    console.log('Total hours calculated:', totalHours);
+    
     if (totalHours <= 0) {
+        console.log('ERROR: Invalid hours');
         showNotification('End time must be after start time', 'error');
         return;
     }
     
-    const pickupLocation = document.getElementById('pickupLocation').value;
-    const returnLocation = document.getElementById('returnLocation').value;
-    const destination = document.getElementById('destination').value;
+    // Validate car selection
+    const carSelect = document.getElementById('carSelect');
+    const selectedCar = carSelect ? carSelect.value : '';
+    console.log('Selected car:', selectedCar);
+    
+    if (!selectedCar) {
+        console.log('ERROR: No car selected');
+        showNotification('Please select a car', 'error');
+        return;
+    }
+    
+    // Get locations - with detailed logging
+    const pickupElement = document.getElementById('pickupLocation');
+    const returnElement = document.getElementById('returnLocation');
+    const destinationElement = document.getElementById('destination');
+    
+    console.log('Pickup element:', pickupElement);
+    console.log('Return element:', returnElement);
+    console.log('Destination element:', destinationElement);
+    
+    const pickupLocation = pickupElement ? pickupElement.value.trim() : '';
+    const returnLocation = returnElement ? returnElement.value.trim() : '';
+    const destination = destinationElement ? destinationElement.value.trim() : '';
+    
+    console.log('Locations:', {
+        pickup: pickupLocation,
+        return: returnLocation,
+        destination: destination
+    });
     
     if (!pickupLocation || !returnLocation) {
+        console.log('ERROR: Missing locations');
         showNotification('Please fill in pickup and return locations', 'error');
         return;
     }
     
-    // Prepare booking data
-    const bookingDetails = {
-        car: document.getElementById('selectedCar').textContent,
-        startDate: formatDateTime(selectedStartDate, startTime),
-        endDate: formatDateTime(selectedEndDate, endTime),
-        totalHours: totalHours,
-        pickupLocation: pickupLocation,
-        returnLocation: returnLocation,
-        destination: destination
-    };
+    // Format datetime for Laravel (YYYY-MM-DD HH:mm:ss)
+    const startDateTime = formatDateTimeForLaravel(selectedStartDate, startTime);
+    const endDateTime = formatDateTimeForLaravel(selectedEndDate, endTime);
     
-    console.log('Booking confirmed:', bookingDetails);
-    
-    // Redirect to confirmation page with booking details
-    const params = new URLSearchParams({
-        car: bookingDetails.car,
-        destination: bookingDetails.pickupLocation,
-        hours: totalHours,
-        startTime: `${startTime.hour}:${startTime.minute.toString().padStart(2, '0')}${startTime.period.toLowerCase()}`,
-        endTime: `${endTime.hour}:${endTime.minute.toString().padStart(2, '0')}${endTime.period.toLowerCase()}`,
-        startDate: formatDate(selectedStartDate).replace(/\//g, '.'),
-        endDate: formatDate(selectedEndDate).replace(/\//g, '.')
+    console.log('Formatted times:', {
+        start: startDateTime,
+        end: endDateTime
     });
     
-    window.location.href = `/booking/confirm?${params.toString()}`;
+    const bookingData = {
+        car: selectedCar,
+        destination: destination,
+        Pickup: pickupLocation,
+        Return: returnLocation,
+        start_time: startDateTime,
+        end_time: endDateTime,
+        hours: totalHours
+    };
+    
+    console.log('=== FINAL BOOKING DATA ===', bookingData);
+    
+    // Build URL with all parameters
+    const params = new URLSearchParams(bookingData);
+    const finalUrl = `/booking/confirm?${params.toString()}`;
+    
+    console.log('Redirecting to:', finalUrl);
+    
+    // Redirect to confirm page
+    window.location.href = finalUrl;
 }
 
-// Show notification
 function showNotification(message, type = 'info') {
-    // Remove existing notifications
     const existingNotification = document.querySelector('.notification');
     if (existingNotification) {
         existingNotification.remove();
@@ -593,7 +577,6 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Add animation styles
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideDown {
